@@ -12,6 +12,7 @@
 /* === RESET === */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { height: 100%; -webkit-tap-highlight-color: transparent; }
+[hidden] { display: none !important; }
 body {
   font-family: 'Rajdhani', system-ui, -apple-system, sans-serif;
   background: #05060d;
@@ -695,6 +696,124 @@ svg { display: inline-block; vertical-align: middle; flex-shrink: 0; }
 }
 .modal-btn:hover { background: rgba(255,255,255,0.05); }
 
+/* === LOGIN SCREEN === */
+.login-screen {
+  position: fixed; inset: 0; z-index: 30;
+  display: flex; align-items: center; justify-content: center;
+  padding: 1.5rem;
+}
+.login-card {
+  position: relative; z-index: 1;
+  width: 100%; max-width: 26rem;
+  border: 1px solid rgba(245,158,11,0.25);
+  background: rgba(2,6,23,0.85);
+  backdrop-filter: blur(20px);
+  border-radius: 8px;
+  padding: 2.5rem 2rem;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 60px rgba(251,191,36,0.08);
+  animation: slideUp 0.5s cubic-bezier(0.16,1,0.3,1) both;
+}
+.login-orb {
+  position: relative; width: 80px; height: 80px;
+  margin: 0 auto 1rem;
+}
+.login-orb-aura {
+  position: absolute; inset: 0; border-radius: 50%;
+  background: radial-gradient(circle, rgba(251,191,36,0.5) 0%, transparent 70%);
+  animation: kiPulse 2s ease-in-out infinite;
+}
+.login-orb-icon {
+  position: absolute; inset: 16px; border-radius: 50%;
+  background: linear-gradient(135deg, rgba(251,191,36,0.25), rgba(0,0,0,0.4));
+  border: 1px solid rgba(251,191,36,0.6);
+  display: flex; align-items: center; justify-content: center;
+  color: #fbbf24;
+  filter: drop-shadow(0 0 10px rgba(251,191,36,0.8));
+}
+.login-title {
+  font-family: 'Cinzel', serif;
+  font-size: 1.5rem; font-weight: 900;
+  color: #fcd34d; letter-spacing: 0.18em;
+  text-shadow: 0 0 20px rgba(251,191,36,0.5);
+  margin-bottom: 0.25rem;
+}
+.login-sub {
+  font-size: 11px; text-transform: uppercase;
+  letter-spacing: 0.3em; color: #64748b;
+  margin-bottom: 2rem;
+}
+.login-tabs {
+  display: flex; gap: 0;
+  border: 1px solid #1e293b; border-radius: 4px;
+  margin-bottom: 1.25rem; padding: 3px;
+  background: rgba(0,0,0,0.4);
+}
+.login-tab {
+  flex: 1; padding: 0.5rem;
+  font-family: 'Cinzel', serif; font-size: 0.75rem;
+  font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.15em; color: #64748b;
+  border-radius: 3px;
+  transition: all 0.2s;
+}
+.login-tab:hover { color: #cbd5e1; }
+.login-tab.active {
+  background: linear-gradient(135deg, rgba(245,158,11,0.18), rgba(245,158,11,0.05));
+  color: #fcd34d;
+  box-shadow: inset 0 0 12px rgba(251,191,36,0.1);
+}
+.login-form {
+  display: flex; flex-direction: column; gap: 0.75rem;
+}
+.login-form input {
+  background: rgba(0,0,0,0.4);
+  border: 1px solid #334155;
+  border-radius: 4px;
+  padding: 0.75rem 1rem;
+  color: #e2e8f0;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.875rem;
+  width: 100%;
+}
+.login-form input::placeholder { color: #475569; }
+.login-form input:focus {
+  border-color: rgba(251,191,36,0.5);
+  box-shadow: 0 0 0 3px rgba(251,191,36,0.08);
+}
+#login-error {
+  font-size: 0.75rem;
+  text-align: center;
+  min-height: 1rem;
+  line-height: 1.4;
+  color: #fca5a5;
+}
+#login-submit {
+  margin-top: 0.25rem;
+  background: linear-gradient(135deg, rgba(245,158,11,0.25), rgba(245,158,11,0.08));
+  border: 1px solid rgba(251,191,36,0.5);
+  color: #fcd34d;
+  padding: 0.875rem 1rem;
+  border-radius: 4px;
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  transition: all 0.2s;
+}
+#login-submit:hover:not(:disabled) {
+  background: linear-gradient(135deg, rgba(245,158,11,0.35), rgba(245,158,11,0.15));
+  box-shadow: 0 0 20px rgba(251,191,36,0.3);
+}
+#login-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+.login-info {
+  margin-top: 1.5rem; font-size: 11px;
+  color: #64748b; line-height: 1.6;
+  font-style: italic;
+}
+
 /* === LOADING SCREEN === */
 .loading {
   min-height: 100vh; display: flex;
@@ -827,35 +946,8 @@ svg { display: inline-block; vertical-align: middle; flex-shrink: 0; }
   overflow-y: auto;
 }
 </style>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-
-<div id="auth-screen" class="loading" hidden>
-  <div class="card" style="width: 100%; max-width: 24rem; margin: 0 1rem; position: relative;">
-    <div class="modal-aura purple" style="z-index: -1;"></div>
-    <div class="text-center mb-6">
-      <h2 class="font-display text-3xl font-black text-amber-100 tracking-widest">SYSTEM LOGIN</h2>
-      <p class="text-xs text-slate-400 tracking-widest uppercase mt-2">Identify yourself, Hunter.</p>
-    </div>
-    <div class="space-y-4">
-      <div>
-        <label class="text-xs uppercase tracking-widest text-slate-400">Email</label>
-        <input type="email" id="auth-email" class="input mt-1" placeholder="hunter@guild.com">
-      </div>
-      <div>
-        <label class="text-xs uppercase tracking-widest text-slate-400">Password</label>
-        <input type="password" id="auth-pass" class="input mt-1" placeholder="••••••••">
-      </div>
-      <div id="auth-error" class="text-xs text-red-400 text-center" style="min-height: 1rem;"></div>
-      <div class="flex gap-2">
-        <button onclick="handleLogin()" class="btn btn-amber flex-1 justify-center">Login</button>
-        <button onclick="handleSignup()" class="btn btn-cyan flex-1 justify-center">Sign Up</button>
-      </div>
-    </div>
-  </div>
-</div>
-
 <div class="cosmic-bg" id="cosmic-bg">
   <div class="grid-bg"></div>
   <div class="aura-blob tl" id="aura-tl"></div>
@@ -866,7 +958,31 @@ svg { display: inline-block; vertical-align: middle; flex-shrink: 0; }
 <div id="loading-screen" class="loading">
   <div>
     <div class="loading-spinner"></div>
-    <div class="loading-text">Channeling cosmic archive...</div>
+    <div class="loading-text">Initializing system...</div>
+  </div>
+</div>
+
+<div id="login-screen" class="login-screen" hidden>
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="login-orb">
+        <div class="login-orb-aura"></div>
+        <div class="login-orb-icon" id="login-orb-icon"></div>
+      </div>
+    </div>
+    <h1 class="login-title">SOLO LEVELING</h1>
+    <div class="login-sub">System Authentication</div>
+    <div class="login-tabs">
+      <button class="login-tab active" data-mode="signin" onclick="app.setLoginMode('signin')">Sign In</button>
+      <button class="login-tab" data-mode="signup" onclick="app.setLoginMode('signup')">Sign Up</button>
+    </div>
+    <form class="login-form" onsubmit="event.preventDefault();app.handleLoginSubmit()">
+      <input id="login-email" type="email" placeholder="email@domain.com" autocomplete="email" required>
+      <input id="login-password" type="password" placeholder="password (min. 6 chars)" autocomplete="current-password" required minlength="6">
+      <div id="login-error"></div>
+      <button id="login-submit" type="submit">Authenticate</button>
+    </form>
+    <div class="login-info">Each warrior has their own private archive.<br>Data is encrypted and isolated by user.</div>
   </div>
 </div>
 
@@ -877,13 +993,12 @@ svg { display: inline-block; vertical-align: middle; flex-shrink: 0; }
         <div class="brand-icon" id="brand-icon"></div>
         <div class="brand-text">
           <div class="brand-title" id="brand-title">SOLO LEVELING</div>
-          <div class="brand-sub">System Interface</div>
+          <div class="brand-sub" id="brand-sub">System Interface</div>
         </div>
       </div>
       <div class="header-right">
         <div id="sync-badge"></div>
         <div class="pwr-pill" id="pwr-pill"></div>
-        <button onclick="handleLogout()" class="btn" style="border:1px solid #ef4444;color:#f87171;padding:0.375rem;border-radius:6px;background:rgba(239,68,68,0.1)">Logout</button>
       </div>
     </div>
   </header>
@@ -903,51 +1018,124 @@ svg { display: inline-block; vertical-align: middle; flex-shrink: 0; }
 'use strict';
 
 // ============= SUPABASE =============
-const SUPABASE_URL = "https://unfriiscjmjxtdzybajv.supabase.co";
+const SUPABASE_BASE = "https://unfriiscjmjxtdzybajv.supabase.co";
+const SUPABASE_URL = SUPABASE_BASE + "/rest/v1/";
+const SUPABASE_AUTH_URL = SUPABASE_BASE + "/auth/v1/";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVuZnJpaXNjam1qeHRkenliYWp2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcxOTc0NDQsImV4cCI6MjA5Mjc3MzQ0NH0.AnX7FTvfjzyHYq9X3eZass8g5y-E4Z9s098GW13_aRA";
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const AUTH_STORAGE_KEY = "solo_leveling_auth_v1";
 
-let STATE_ID = null;
+// ===== Auth state =====
+let auth = { user: null, accessToken: null, refreshToken: null, expiresAt: 0 };
+
+function loadAuthFromStorage() {
+  try {
+    const raw = localStorage.getItem(AUTH_STORAGE_KEY);
+    if (!raw) return;
+    const a = JSON.parse(raw);
+    if (a && a.user && a.accessToken && a.refreshToken) auth = a;
+  } catch (e) {}
+}
+function saveAuthToStorage() {
+  try { localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(auth)); } catch (e) {}
+}
+function clearAuthFromStorage() {
+  auth = { user: null, accessToken: null, refreshToken: null, expiresAt: 0 };
+  try { localStorage.removeItem(AUTH_STORAGE_KEY); } catch (e) {}
+}
+
+function authHeaders() {
+  return {
+    "apikey": SUPABASE_KEY,
+    "Authorization": "Bearer " + (auth.accessToken || SUPABASE_KEY),
+    "Content-Type": "application/json",
+  };
+}
+
+async function ensureValidToken() {
+  if (!auth.accessToken) throw new Error("Not authenticated");
+  if (Date.now() >= auth.expiresAt - 60000) {
+    await refreshSession();
+  }
+}
+
+async function signUp(email, password) {
+  const res = await fetch(SUPABASE_AUTH_URL + "signup", {
+    method: "POST",
+    headers: { "apikey": SUPABASE_KEY, "Content-Type": "application/json" },
+    body: JSON.stringify({ email, password }),
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.msg || data.error_description || data.error || data.message || ("HTTP " + res.status));
+  if (data.session && data.user) {
+    auth.user = { id: data.user.id, email: data.user.email };
+    auth.accessToken = data.session.access_token;
+    auth.refreshToken = data.session.refresh_token;
+    auth.expiresAt = Date.now() + (data.session.expires_in * 1000);
+    saveAuthToStorage();
+    return { needsConfirmation: false };
+  }
+  return { needsConfirmation: true };
+}
+
+async function signIn(email, password) {
+  const res = await fetch(SUPABASE_AUTH_URL + "token?grant_type=password", {
+    method: "POST",
+    headers: { "apikey": SUPABASE_KEY, "Content-Type": "application/json" },
+    body: JSON.stringify({ email, password }),
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.msg || data.error_description || data.error || data.message || ("HTTP " + res.status));
+  auth.user = { id: data.user.id, email: data.user.email };
+  auth.accessToken = data.access_token;
+  auth.refreshToken = data.refresh_token;
+  auth.expiresAt = Date.now() + (data.expires_in * 1000);
+  saveAuthToStorage();
+}
+
+async function refreshSession() {
+  if (!auth.refreshToken) throw new Error("No refresh token");
+  const res = await fetch(SUPABASE_AUTH_URL + "token?grant_type=refresh_token", {
+    method: "POST",
+    headers: { "apikey": SUPABASE_KEY, "Content-Type": "application/json" },
+    body: JSON.stringify({ refresh_token: auth.refreshToken }),
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error("Session refresh failed");
+  auth.accessToken = data.access_token;
+  auth.refreshToken = data.refresh_token;
+  auth.expiresAt = Date.now() + (data.expires_in * 1000);
+  if (data.user) auth.user = { id: data.user.id, email: data.user.email };
+  saveAuthToStorage();
+}
+
+async function authSignOut() {
+  if (auth.accessToken) {
+    try {
+      await fetch(SUPABASE_AUTH_URL + "logout", { method: "POST", headers: authHeaders() });
+    } catch (e) {}
+  }
+  clearAuthFromStorage();
+}
 
 async function sbLoad() {
-  if (!STATE_ID) return null;
-  const { data, error } = await supabase.from('solo_leveling_state').select('data').eq('id', STATE_ID).maybeSingle();
-  if (error) throw new Error("Load error: " + error.message);
-  return data ? data.data : null;
+  await ensureValidToken();
+  const res = await fetch(SUPABASE_URL + "solo_leveling_state?user_id=eq." + auth.user.id + "&select=data", { headers: authHeaders() });
+  if (!res.ok) throw new Error("Load " + res.status + ": " + await res.text());
+  const rows = await res.json();
+  return rows.length === 0 ? null : rows[0].data;
 }
 async function sbSave(data) {
-  if (!STATE_ID) return;
-  const { error } = await supabase.from('solo_leveling_state').upsert({ id: STATE_ID, data, updated_at: new Date().toISOString() });
-  if (error) throw new Error("Save error: " + error.message);
+  await ensureValidToken();
+  const res = await fetch(SUPABASE_URL + "solo_leveling_state", {
+    method: "POST",
+    headers: { ...authHeaders(), "Prefer": "resolution=merge-duplicates,return=minimal" },
+    body: JSON.stringify({ user_id: auth.user.id, data, updated_at: new Date().toISOString() }),
+  });
+  if (!res.ok) throw new Error("Save " + res.status + ": " + await res.text());
 }
 async function sbDelete() {
-  if (!STATE_ID) return;
-  const { error } = await supabase.from('solo_leveling_state').delete().eq('id', STATE_ID);
-  if (error) throw new Error("Delete error: " + error.message);
-}
-
-// Auth handlers
-async function handleLogin() {
-  const email = document.getElementById('auth-email').value;
-  const password = document.getElementById('auth-pass').value;
-  const errEl = document.getElementById('auth-error');
-  errEl.innerText = 'Authenticating...';
-  const { error } = await supabase.auth.signInWithPassword({ email, password });
-  if (error) errEl.innerText = error.message;
-}
-
-async function handleSignup() {
-  const email = document.getElementById('auth-email').value;
-  const password = document.getElementById('auth-pass').value;
-  const errEl = document.getElementById('auth-error');
-  errEl.innerText = 'Registering...';
-  const { error } = await supabase.auth.signUp({ email, password });
-  if (error) errEl.innerText = error.message;
-  else errEl.innerText = 'Success! Check email or login directly.';
-}
-
-function handleLogout() {
-  supabase.auth.signOut().then(() => location.reload());
+  await ensureValidToken();
+  await fetch(SUPABASE_URL + "solo_leveling_state?user_id=eq." + auth.user.id, { method: "DELETE", headers: authHeaders() });
 }
 
 // ============= CONSTANTS =============
@@ -1101,6 +1289,8 @@ let syncStatus = "loading";
 let levelUpRank = null;
 let prevRankIdx = null;
 let saveTimer = null;
+let loginMode = 'signin';
+let loginPending = false;
 
 function getTotals() {
   const today = todayKey();
@@ -1337,6 +1527,69 @@ window.app = {
     renderHeader(); renderView();
   },
   closeLevelUp() { levelUpRank = null; renderModal(); },
+  // ===== Login actions =====
+  setLoginMode(mode) {
+    loginMode = mode;
+    document.querySelectorAll('.login-tab').forEach(t => {
+      t.classList.toggle('active', t.dataset.mode === mode);
+    });
+    const errEl = document.getElementById('login-error');
+    if (errEl) { errEl.textContent = ''; errEl.style.color = '#fca5a5'; }
+    const submit = document.getElementById('login-submit');
+    if (submit) submit.textContent = mode === 'signin' ? 'Authenticate' : 'Forge Account';
+    const pw = document.getElementById('login-password');
+    if (pw) pw.autocomplete = mode === 'signin' ? 'current-password' : 'new-password';
+  },
+  async handleLoginSubmit() {
+    if (loginPending) return;
+    const email = document.getElementById('login-email').value.trim();
+    const password = document.getElementById('login-password').value;
+    const errEl = document.getElementById('login-error');
+    const submit = document.getElementById('login-submit');
+    errEl.style.color = '#fca5a5';
+    if (!email || !password) { errEl.textContent = 'Email and password required.'; return; }
+    if (password.length < 6) { errEl.textContent = 'Password must be at least 6 characters.'; return; }
+    loginPending = true;
+    errEl.textContent = '';
+    submit.disabled = true;
+    submit.textContent = 'Connecting...';
+    try {
+      if (loginMode === 'signup') {
+        const result = await signUp(email, password);
+        if (result.needsConfirmation) {
+          errEl.style.color = '#34d399';
+          errEl.textContent = 'Account forged. Check your email to confirm — then sign in.';
+          document.getElementById('login-password').value = '';
+          loginMode = 'signin';
+          document.querySelectorAll('.login-tab').forEach(t => t.classList.toggle('active', t.dataset.mode === 'signin'));
+          submit.textContent = 'Authenticate';
+          return;
+        }
+      } else {
+        await signIn(email, password);
+      }
+      await launchApp();
+    } catch (e) {
+      errEl.style.color = '#fca5a5';
+      errEl.textContent = (e && e.message) ? e.message : 'Authentication failed.';
+    } finally {
+      loginPending = false;
+      submit.disabled = false;
+      if (loginPending === false && document.getElementById('login-screen') && !document.getElementById('login-screen').hidden) {
+        submit.textContent = loginMode === 'signin' ? 'Authenticate' : 'Forge Account';
+      }
+    }
+  },
+  async signOut() {
+    if (!confirm("Sign out? Your data stays safe in the cloud.")) return;
+    clearTimeout(saveTimer);
+    await authSignOut();
+    state = { days: {}, diary: {}, goals: [], folders: [], settings: JSON.parse(JSON.stringify(DEFAULT_SETTINGS)) };
+    activeFolderId = null; activeNoteId = null;
+    currentView = "dashboard"; habitsDate = todayKey(); diaryDate = todayKey();
+    prevRankIdx = null; levelUpRank = null;
+    showLogin();
+  },
 };
 
 // ============= RENDERING =============
@@ -1360,6 +1613,7 @@ function renderHeader() {
     '<div style="position:relative;color:' + r.color + ';filter:drop-shadow(0 0 8px ' + r.glow + ')">' + icon('crown', 22) + '</div>';
   brandTitle.style.color = r.color;
   brandTitle.style.textShadow = '0 0 20px ' + r.aura;
+  document.getElementById('brand-sub').textContent = auth.user ? auth.user.email : 'System Interface';
   pwrPill.innerHTML =
     '<span style="color:#fbbf24">' + icon('zap', 14) + '</span>' +
     '<span class="font-mono text-sm font-bold" style="color:' + r.color + '">' + total.toLocaleString() + '</span>' +
@@ -1942,12 +2196,24 @@ function renderSettings() {
     '</div>' +
 
     '<div class="card space-y-3">' +
-      '<h2 class="font-display tracking-widest uppercase text-amber-100 font-bold flex items-center gap-2"><span class="text-amber-300">' + icon('shield', 16) + '</span>Data Management</h2>' +
+      '<h2 class="font-display tracking-widest uppercase text-amber-100 font-bold flex items-center gap-2"><span class="text-amber-300">' + icon('shield', 16) + '</span>Account</h2>' +
+      '<div class="flex items-center justify-between gap-3" style="padding:0.75rem;background:rgba(0,0,0,0.3);border:1px solid #1e293b;border-radius:4px">' +
+        '<div style="min-width:0;flex:1">' +
+          '<div class="text-xs uppercase tracking-widest text-slate-500" style="margin-bottom:0.125rem">Signed in as</div>' +
+          '<div class="font-mono text-sm text-amber-200" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + escapeHtml(auth.user ? auth.user.email : '—') + '</div>' +
+        '</div>' +
+        '<button class="btn btn-red" onclick="app.signOut()" style="flex-shrink:0">Sign Out</button>' +
+      '</div>' +
+      '<p class="text-xs text-slate-500 italic">Your data is private to your account. Sessions auto-renew.</p>' +
+    '</div>' +
+
+    '<div class="card space-y-3">' +
+      '<h2 class="font-display tracking-widest uppercase text-amber-100 font-bold flex items-center gap-2"><span class="text-amber-300">' + icon('download', 16) + '</span>Data Management</h2>' +
       '<div class="flex" style="flex-wrap:wrap;gap:0.5rem">' +
         '<button class="btn btn-cyan" onclick="app.exportData()">' + icon('download', 12) + 'Export</button>' +
         '<button class="btn btn-red" onclick="app.resetAll()">' + icon('refresh', 12) + 'Reset All</button>' +
       '</div>' +
-      '<p class="text-xs text-slate-500 italic">Your data syncs to Supabase. Export creates a local backup.</p>' +
+      '<p class="text-xs text-slate-500 italic">Reset wipes your archive. Export creates a local backup.</p>' +
     '</div>' +
   '</div>';
 }
@@ -1980,24 +2246,42 @@ function renderModal() {
 }
 
 // ============= INIT =============
-supabase.auth.onAuthStateChange(async (event, session) => {
-  if (session) {
-    document.getElementById('auth-screen').hidden = true;
-    document.getElementById('app').hidden = true;
-    if (!STATE_ID) {
-      STATE_ID = session.user.id;
-      document.getElementById('loading-screen').hidden = false;
-      await initAppData();
-    }
-  } else {
-    document.getElementById('loading-screen').hidden = true;
-    document.getElementById('app').hidden = true;
-    document.getElementById('auth-screen').hidden = false;
-    STATE_ID = null;
-  }
-});
+function showLogin() {
+  const ls = document.getElementById('login-screen');
+  const appEl = document.getElementById('app');
+  if (ls) ls.hidden = false;
+  if (appEl) appEl.hidden = true;
+  // Inject crown icon into orb
+  const orb = document.getElementById('login-orb-icon');
+  if (orb && !orb.innerHTML) orb.innerHTML = icon('crown', 28);
+  // Reset error and mode
+  const errEl = document.getElementById('login-error');
+  if (errEl) errEl.textContent = '';
+  loginMode = 'signin';
+  document.querySelectorAll('.login-tab').forEach(t => t.classList.toggle('active', t.dataset.mode === 'signin'));
+  const submit = document.getElementById('login-submit');
+  if (submit) { submit.disabled = false; submit.textContent = 'Authenticate'; }
+  // Focus email
+  setTimeout(() => {
+    const em = document.getElementById('login-email');
+    if (em) em.focus();
+  }, 100);
+}
 
-async function initAppData() {
+function showApp() {
+  const ls = document.getElementById('login-screen');
+  const appEl = document.getElementById('app');
+  if (ls) ls.hidden = true;
+  if (appEl) appEl.hidden = false;
+}
+
+async function launchApp() {
+  showApp();
+  syncStatus = "loading";
+  renderHeader();
+  renderSyncBadge();
+  renderNav();
+  renderView();
   try {
     const s = await sbLoad();
     if (s) {
@@ -2015,13 +2299,32 @@ async function initAppData() {
     syncStatus = "error";
   }
   prevRankIdx = getActiveRank().index;
-  document.getElementById('loading-screen').hidden = true;
-  document.getElementById('app').hidden = false;
   renderHeader();
   renderSyncBadge();
-  renderNav();
   renderView();
 }
+
+(async function init() {
+  loadAuthFromStorage();
+  const loadingScreen = document.getElementById('loading-screen');
+
+  if (auth.accessToken && auth.user) {
+    try {
+      if (Date.now() >= auth.expiresAt - 60000) {
+        await refreshSession();
+      }
+      if (loadingScreen) loadingScreen.remove();
+      await launchApp();
+      return;
+    } catch (e) {
+      console.error('Session validation failed:', e);
+      clearAuthFromStorage();
+    }
+  }
+
+  if (loadingScreen) loadingScreen.remove();
+  showLogin();
+})();
 </script>
 </body>
 </html>
